@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para sayo to boi!</title>
+    <link rel="stylesheet" href="index.css">
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon"> <meta property="og:type" content="website">
+    <meta property="og:url" content="https://yourwebsite.com/index.html"> <meta property="og:title" content="Happy Birthday! A Special Surprise for You">
+    <meta property="og:description" content="Unwrap a special surprise and relive favorite moments.">
+    <meta property="og:image" content="https://yourwebsite.com/images/og-image.jpg"> <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://yourwebsite.com/index.html"> <meta property="twitter:title" content="Happy Birthday! A Special Surprise for You">
+    <meta property="twitter:description" content="Unwrap a special surprise and relive favorite moments.">
+    <meta property="twitter:image" content="https://yourwebsite.com/images/twitter-image.jpg"> </head>
+<body>
+
+    <div id="birthdaySection" class="birthday-container">
+        <div class="decorations">
+            <div class="balloon"></div>
+            <div class="balloon"></div>
+            <div class="balloon"></div>
+            <div class="confetti"></div>
+            <div class="confetti"></div>
+            <div class="confetti"></div>
+        </div>
+        <div class="greeting">
+            <h1>Happy Birthday, Baby!</h1>
+            <p>Every moment with you is a treasure. You bring so much light and happiness into my life. I cherish our memories and look forward to many more beautiful moments together.</p>
+            <button id="birthdayButton" aria-controls="memoriesSection">Unwrap Your Surprise!</button>
+        </div>
+    </div>
+
+    <div id="memoriesSection" class="memories-container hidden">
+        <h2>Favorite Moments With You</h2>
+        <div id="memoryGrid" class="memory-grid">
+            </div>
+        <div class="button-group">
+            <button id="closeMemories">Go Back</button>
+            <button id="nextButton" class="envelope-button">
+                <span class="envelope-icon"></span>
+                Next
+            </button>
+        </div>
+    </div>
+
+    <div id="letterOverlay" class="letter-overlay hidden">
+        <div class="letter-container">
+            <h2>A Special Letter Just For You</h2>
+            <div class="envelope">
+                <div class="flap"></div>
+                <div class="body"></div>
+                <div class="letter">
+                    <p id="letterContent"></p>
+                    <p class="signature">With all my love,</p>
+                    <p class="signature-name">Kaheldev</p> </div>
+            </div>
+            <button id="closeLetter">Close Letter</button>
+        </div>
+    </div>
+
+    <script src="index.js"></script>
+</body>
+</html>
