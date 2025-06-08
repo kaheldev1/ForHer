@@ -1,18 +1,38 @@
 (function() {
-    const DOM = {
-        birthdayButton: document.getElementById('birthdayButton'),
-        birthdayContainer: document.querySelector('.birthday-container'),
-        memoriesSection: document.getElementById('memoriesSection'),
-        memoryGrid: document.getElementById('memoryGrid'),
-        closeMemoriesButton: document.getElementById('closeMemories'),
-        nextButton: document.getElementById('nextButton'),
-        letterOverlay: document.getElementById('letterOverlay'),
-        closeLetterButton: document.getElementById('closeLetter')
-    };
+    const DOM = {};
 
-    DOM.letterContainer = DOM.letterOverlay ? DOM.letterOverlay.querySelector('.letter-container') : null;
-    DOM.envelope = DOM.letterContainer ? DOM.letterContainer.querySelector('.envelope') : null;
-    DOM.letterContentElement = DOM.envelope ? DOM.envelope.querySelector('#letterContent') : null;
+    function cacheDOM() {
+        DOM.birthdayButton = document.getElementById('birthdayButton');
+        DOM.birthdayContainer = document.querySelector('.birthday-container');
+        DOM.memoriesSection = document.getElementById('memoriesSection');
+        DOM.memoryGrid = document.getElementById('memoryGrid');
+        DOM.closeMemoriesButton = document.getElementById('closeMemories');
+        DOM.nextButton = document.getElementById('nextButton');
+        DOM.letterOverlay = document.getElementById('letterOverlay');
+        DOM.closeLetterButton = document.getElementById('closeLetter');
+
+        DOM.letterContainer = DOM.letterOverlay ? DOM.letterOverlay.querySelector('.letter-container') : null;
+        DOM.envelope = DOM.letterContainer ? DOM.letterContainer.querySelector('.envelope') : null;
+        DOM.letterContentElement = DOM.envelope ? DOM.envelope.querySelector('#letterContent') : null;
+
+        // New modal elements
+        DOM.imageModalOverlay = document.createElement('div');
+        DOM.imageModalOverlay.classList.add('image-modal-overlay');
+        DOM.imageModalContent = document.createElement('div');
+        DOM.imageModalContent.classList.add('image-modal-content');
+        DOM.imageModalImg = document.createElement('img');
+        DOM.imageModalText = document.createElement('p'); // Element for the memory text
+        DOM.imageModalText.classList.add('modal-text');
+        DOM.imageModalCloseButton = document.createElement('button');
+        DOM.imageModalCloseButton.classList.add('image-modal-close');
+        DOM.imageModalCloseButton.innerHTML = '&times;'; // 'x' symbol
+
+        DOM.imageModalContent.appendChild(DOM.imageModalImg);
+        DOM.imageModalContent.appendChild(DOM.imageModalText); // Append the text element
+        DOM.imageModalContent.appendChild(DOM.imageModalCloseButton);
+        DOM.imageModalOverlay.appendChild(DOM.imageModalContent);
+        document.body.appendChild(DOM.imageModalOverlay); // Add to body once
+    }
 
     const memoriesData = [
         { image: 'images/IMG_4180.JPEG', text: 'Ito yung date na gusto ko sa lahat.' },
@@ -25,10 +45,17 @@
 
     const fullLetter = `Baby,
 
-Happy birthday! happy birthday ngani!
+Happy birthday! Gusto ko lang sabihin na sobrang saya ko kasi nakilala kita. 
+From our silly jokes, your comforting presence, and our shared dreams, every moment with you is a treasure. You bring so much joy and warmth into my life, and I'm incredibly grateful for your love and support.
 
+I wish you all the happiness in the world, and I promise to be here for you, always. May your special day be filled with everything you wished for, and may our future together be even brighter.
 
-`;
+I love you more than words can say.
+
+Happy Birthday, my love!
+
+Love,
+[Your Name]`;
 
     let charIndex = 0;
     let typingTimeout;
@@ -43,6 +70,8 @@ Happy birthday! happy birthday ngani!
         img.src = memory.image;
         img.alt = memory.text;
         img.loading = 'lazy';
+        // Make the image clickable and pass the entire memory object
+        img.addEventListener('click', () => showImageInModal(memory));
 
         const p = document.createElement('p');
         p.classList.add('memory-text');
@@ -67,7 +96,7 @@ Happy birthday! happy birthday ngani!
             DOM.memoryGrid.appendChild(item);
             setTimeout(() => {
                 item.classList.add('visible');
-            }, index * 100);
+            }, index * 150);
         });
     }
 
@@ -124,8 +153,8 @@ Happy birthday! happy birthday ngani!
     }
 
     function triggerConfetti() {
-        const confettiCount = 50;
-        const colors = ['#FF6F91', '#845EF7', '#F0E68C', '#B9F6CA', '#82B1FF', '#FFD700'];
+        const confettiCount = 80;
+        const colors = ['#FF6F91', '#A367DC', '#F0E68C', '#B9F6CA', '#82B1FF', '#FFD700', '#FFC0CB', '#DAF7A6'];
         const shapes = ['square', 'circle', 'triangle'];
 
         let confettiContainer = document.querySelector('.js-confetti');
@@ -137,6 +166,9 @@ Happy birthday! happy birthday ngani!
             confettiContainer.innerHTML = '';
         }
 
+        const buttonRect = DOM.birthdayButton.getBoundingClientRect();
+        const startX = buttonRect.left + buttonRect.width / 2;
+        const startY = buttonRect.top + buttonRect.height / 2;
 
         for (let i = 0; i < confettiCount; i++) {
             const particle = document.createElement('div');
@@ -148,41 +180,69 @@ Happy birthday! happy birthday ngani!
             if (shape === 'circle') {
                 particle.style.borderRadius = '50%';
             } else if (shape === 'triangle') {
-
+                particle.style.width = '0';
+                particle.style.height = '0';
+                particle.style.borderLeft = `${Math.random() * 8 + 5}px solid transparent`;
+                particle.style.borderRight = `${Math.random() * 8 + 5}px solid transparent`;
+                particle.style.borderBottom = `${Math.random() * 12 + 8}px solid ${particle.style.backgroundColor}`;
+                particle.style.backgroundColor = 'transparent';
             }
 
             const size = Math.random() * 8 + 5;
-            particle.style.width = `${size}px`;
-            particle.style.height = `${size}px`;
-
-            const buttonRect = DOM.birthdayButton.getBoundingClientRect();
-            const startX = buttonRect.left + buttonRect.width / 2;
-            const startY = buttonRect.top + buttonRect.height / 2;
+            if (shape !== 'triangle') {
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+            }
+            
             particle.style.left = `${startX}px`;
             particle.style.top = `${startY}px`;
 
-            const endX = startX + (Math.random() - 0.5) * 600;
-            const endY = startY + (Math.random() * 400 - 200);
+            const spreadFactor = 300;
+            const initialXOffset = (Math.random() - 0.5) * spreadFactor;
+            const initialYOffset = (Math.random() - 0.5) * spreadFactor;
+            const finalXOffset = (Math.random() - 0.5) * 800;
+            const finalYOffset = window.innerHeight + 100;
             const finalRotation = Math.random() * 1000 - 500;
 
-            particle.style.setProperty('--initial-x', `${(Math.random() - 0.5) * 100}px`);
-            particle.style.setProperty('--initial-y', `${(Math.random() - 0.5) * 100}px`);
+            particle.style.setProperty('--initial-x', `${initialXOffset}px`);
+            particle.style.setProperty('--initial-y', `${initialYOffset}px`);
             particle.style.setProperty('--initial-rot', `${Math.random() * 360}deg`);
-            particle.style.setProperty('--final-x', `${endX - startX}px`);
-            particle.style.setProperty('--final-y', `${window.innerHeight + 100 - startY}px`);
+            particle.style.setProperty('--final-x', `${finalXOffset}px`);
+            particle.style.setProperty('--final-y', `${finalYOffset}px`);
             particle.style.setProperty('--final-rot', `${finalRotation}deg`);
 
-            particle.style.animationDelay = `${Math.random() * 0.5}s`;
+            particle.style.animationDelay = `${Math.random() * 0.4}s`;
             particle.style.animationDuration = `${Math.random() * 1.5 + 1.5}s`;
 
             confettiContainer.appendChild(particle);
 
             particle.addEventListener('animationend', () => {
                 particle.remove();
-                if (confettiContainer.children.length === 0) {
+                if (confettiContainer && confettiContainer.children.length === 0) {
                     confettiContainer.remove();
                 }
             });
+        }
+    }
+
+    // Function to show the image and text in the modal
+    function showImageInModal(memory) {
+        if (DOM.imageModalOverlay && DOM.imageModalImg && DOM.imageModalText) {
+            DOM.imageModalImg.src = memory.image;
+            DOM.imageModalImg.alt = memory.text; // Set alt text for accessibility
+            DOM.imageModalText.textContent = memory.text; // Set the text content
+            DOM.imageModalOverlay.classList.add('visible');
+            document.body.style.overflow = 'hidden'; // Prevent scrolling when modal is open
+        }
+    }
+
+    function hideImageModal() {
+        if (DOM.imageModalOverlay) {
+            DOM.imageModalOverlay.classList.remove('visible');
+            document.body.style.overflow = ''; // Restore scrolling
+            // Clear image and text after hiding to prevent flicker on next open
+            DOM.imageModalImg.src = '';
+            DOM.imageModalText.textContent = '';
         }
     }
 
@@ -227,6 +287,8 @@ Happy birthday! happy birthday ngani!
     }
 
     function init() {
+        cacheDOM();
+
         if (DOM.birthdayButton) {
             DOM.birthdayButton.addEventListener('click', handleBirthdayButtonClick);
         } else {
@@ -251,6 +313,18 @@ Happy birthday! happy birthday ngani!
             console.warn('Close letter button not found.');
         }
 
+        // Event listeners for the image modal
+        if (DOM.imageModalCloseButton) {
+            DOM.imageModalCloseButton.addEventListener('click', hideImageModal);
+        }
+        if (DOM.imageModalOverlay) {
+            DOM.imageModalOverlay.addEventListener('click', (event) => {
+                if (event.target === DOM.imageModalOverlay) { // Only close if clicking the overlay itself
+                    hideImageModal();
+                }
+            });
+        }
+
         if (DOM.letterOverlay) {
             DOM.letterOverlay.addEventListener('click', (event) => {
                 if (event.target === DOM.letterOverlay) {
@@ -263,8 +337,8 @@ Happy birthday! happy birthday ngani!
                 });
             }
         }
-
-        loadMemories();
+        
+        loadMemories(); // Initial load of memories
     }
 
     document.addEventListener('DOMContentLoaded', init);
