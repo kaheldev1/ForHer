@@ -325,8 +325,8 @@ body {
     opacity: 1;
   }
   100% {
-    transform: translateY(-350px) rotate(10deg); /* Less intense rotation */
-    opacity: 0.7; /* Slightly less opaque at the end */
+    transform: translateY(-350px) rotate(10deg);
+    opacity: 0.7;
   }
 }
 
@@ -613,33 +613,7 @@ body {
   align-items: center;
 }
 
-/* Heart design on the envelope */
-.envelope::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) rotate(-45deg); /* Center and rotate for heart shape */
-  width: 60px; /* Size of the heart base square */
-  height: 60px;
-  background-color: var(--primary-color); /* Use your primary color for the heart */
-  border-radius: 10px; /* Slight rounding for the square part */
-  z-index: 4; /* Ensure it's above the envelope body but below the flap when open */
-}
-
-.envelope::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(calc(-50% - 30px), calc(-50% - 30px)) rotate(-45deg); /* Position for top-left circle */
-  width: 60px; /* Size of the heart circles */
-  height: 60px;
-  background-color: var(--primary-color);
-  border-radius: 50%; /* Make it a circle */
-  z-index: 4;
-  box-shadow: 30px 30px 0 var(--primary-color); /* Create the second circle */
-}
+/* Heart design on the envelope - REMOVED */
 
 
 .envelope.open .flap {
