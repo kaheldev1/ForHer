@@ -14,7 +14,6 @@
         DOM.birthdaySong = document.getElementById('birthdaySong');
         DOM.playSongButton = document.getElementById('playSongButton');
         DOM.songIcon = document.getElementById('songIcon');
-        // Add the 'viewFlowersButton' to the DOM cache
         DOM.viewFlowersButton = document.getElementById('viewFlowersButton');
 
         DOM.letterContainer = DOM.letterOverlay ? DOM.letterOverlay.querySelector('.letter-container') : null;
@@ -29,16 +28,28 @@
         DOM.imageModalImg.alt = "Modal image";
         DOM.imageModalText = document.createElement('p');
         DOM.imageModalText.classList.add('modal-text');
-        DOM.imageModalCloseButton = document.createElement('button');
-        DOM.imageModalCloseButton.classList.add('image-modal-close');
-        DOM.imageModalCloseButton.innerHTML = '&times;';
-        DOM.imageModalCloseButton.setAttribute('aria-label', 'Close image modal');
 
         DOM.imageModalContent.appendChild(DOM.imageModalImg);
         DOM.imageModalContent.appendChild(DOM.imageModalText);
-        DOM.imageModalContent.appendChild(DOM.imageModalCloseButton);
         DOM.imageModalOverlay.appendChild(DOM.imageModalContent);
         document.body.appendChild(DOM.imageModalOverlay);
+
+        DOM.infoModalOverlay = document.createElement('div');
+        DOM.infoModalOverlay.classList.add('image-modal-overlay');
+        DOM.infoModalOverlay.id = 'infoModalOverlay';
+
+        DOM.infoModalContent = document.createElement('div');
+        DOM.infoModalContent.classList.add('image-modal-content', 'info-modal-style');
+        DOM.infoModalContent.style.maxWidth = '400px';
+        DOM.infoModalContent.style.padding = 'var(--spacing-small)';
+
+        DOM.infoModalText = document.createElement('p');
+        DOM.infoModalText.classList.add('modal-text');
+        DOM.infoModalText.style.fontSize = '1.1em';
+
+        DOM.infoModalContent.appendChild(DOM.infoModalText);
+        DOM.infoModalOverlay.appendChild(DOM.infoModalContent);
+        document.body.appendChild(DOM.infoModalOverlay);
     }
 
     const memoriesData = [
@@ -70,6 +81,24 @@ Love,
     const paragraphDelay = 500;
 
     let isSongPlaying = false;
+
+    function showInfoModal(message) {
+        if (DOM.infoModalOverlay && DOM.infoModalText) {
+            DOM.infoModalText.textContent = message;
+            DOM.infoModalOverlay.classList.add('visible');
+            DOM.infoModalContent.classList.add('show-animation');
+            document.body.style.overflow = 'hidden';
+        }
+    }
+
+    function hideInfoModal() {
+        if (DOM.infoModalOverlay) {
+            DOM.infoModalOverlay.classList.remove('visible');
+            DOM.infoModalContent.classList.remove('show-animation');
+            document.body.style.overflow = '';
+            DOM.infoModalText.textContent = '';
+        }
+    }
 
     function createMemoryItem(memory) {
         const memoryItem = document.createElement('div');
@@ -259,6 +288,9 @@ Love,
         if (DOM.birthdayButton) {
             DOM.birthdayButton.textContent = "Surprise Revealed!";
             DOM.birthdayButton.disabled = true;
+            setTimeout(() => {
+                showInfoModal("All images in the memory grid are clickable to view them bigger!");
+            }, 700);
         }
     }
 
@@ -330,12 +362,9 @@ Love,
         }
     }
 
-    // New function to handle the "View Flowers" button click
     function handleViewFlowersButtonClick() {
-        // This line opens 'flowers.html' in a new tab ('_blank')
         window.open('flower.html', '_blank');
 
-        // Optional: Pause the song if it's playing when opening the flowers page
         if (isSongPlaying) {
             DOM.birthdaySong.pause();
             DOM.songIcon.classList.remove('playing');
@@ -371,15 +400,30 @@ Love,
             console.warn('Close letter button not found.');
         }
 
-        if (DOM.imageModalCloseButton) {
-            DOM.imageModalCloseButton.addEventListener('click', hideImageModal);
-        }
         if (DOM.imageModalOverlay) {
             DOM.imageModalOverlay.addEventListener('click', (event) => {
                 if (event.target === DOM.imageModalOverlay) {
                     hideImageModal();
                 }
             });
+            if (DOM.imageModalContent) {
+                DOM.imageModalContent.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                });
+            }
+        }
+
+        if (DOM.infoModalOverlay) {
+            DOM.infoModalOverlay.addEventListener('click', (event) => {
+                if (event.target === DOM.infoModalOverlay) {
+                    hideInfoModal();
+                }
+            });
+            if (DOM.infoModalContent) {
+                DOM.infoModalContent.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                });
+            }
         }
 
         if (DOM.letterOverlay) {
@@ -406,7 +450,6 @@ Love,
             console.warn('Play song button not found.');
         }
 
-        // Add event listener for the "View Flowers" button
         if (DOM.viewFlowersButton) {
             DOM.viewFlowersButton.addEventListener('click', handleViewFlowersButtonClick);
         } else {
