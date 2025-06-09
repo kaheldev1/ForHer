@@ -53,27 +53,23 @@
     }
 
     const memoriesData = [
-        { image: 'images/IMG_4180.JPEG', text: 'Ito yung date na gusto ko sa lahat.' },
+        { image: 'images/IMG_4180.JPEG', text: 'Ito favorite kong date natin.' },
         { image: 'images/IMG_2987.JPG', text: 'Ang ganda mo dito.' },
         { image: 'images/FullSizeRender.jpg', text: 'Cute lang natin dito' },
         { image: 'images/IMG_6316.JPEG', text: 'Lasang Milo talaga yon.' },
         { image: 'images/IMG_6688.PNG', text: 'Sana ma-ulit to.' },
-        { image: 'images/IMG_4188.JPEG', text: 'Fav mirrorshot with you.' }
+        { image: 'images/IMG_4188.JPEG', text: 'Fav mirror shot with you.' }
     ];
 
     const fullLetter = `Baby,
 
 Happy birthday! Gusto ko lang sabihin na sobrang saya ko kasi nakilala kita.
-From our silly jokes, your comforting presence, and our shared dreams, every moment with you is a treasure. You bring so much joy and warmth into my life, and I'm incredibly grateful for your love and support.
+Hindi ko ma-explain kung gaano ako, ka saya nung nakilala kita. Ito nalang siguro para maintindihan mo.
+May kulang sakin na, binuo mo. May mga gusto akong maramadaman na kailangan ko pang i-beg sa ibang tao. 
+Pero ikaw binibigay at pinaparamdam mo sakin unconsciously. Mahina ako sa words kaya sa personal nalang tayo
+magsuntokan.
 
-I wish you all the happiness in the world, and I promise to be here for you, always. May your special day be filled with everything you wished for, and may our future together be even brighter.
-
-I love you more than words can say.
-
-Happy Birthday, my love!
-
-Love,
-[Your Name]`;
+`;
 
     let charIndex = 0;
     let typingTimeout;
