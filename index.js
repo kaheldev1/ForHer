@@ -55,7 +55,7 @@
     const memoriesData = [
         { image: 'images/IMG_4180.JPEG', text: 'Ito favorite kong date natin.' },
         { image: 'images/IMG_2987.JPG', text: 'Ang ganda mo dito.' },
-        { image: 'images/FullSizeRender.jpg', text: 'Cute lang natin dito' },
+        { image: 'images/IMG_2469.JPG', text: 'Cute lang natin dito' },
         { image: 'images/IMG_6316.JPEG', text: 'Lasang Milo talaga yon.' },
         { image: 'images/IMG_6688.PNG', text: 'Sana ma-ulit to.' },
         { image: 'images/IMG_4188.JPEG', text: 'Fav mirror shot with you.' }
